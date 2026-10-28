@@ -24,7 +24,7 @@
 
     @foreach ($post['attachments'] as $attachment)
         @if (str_starts_with($attachment['mime_type'], 'image/') && $attachment['url'])
-            <native:image src="{{ $attachment['url'] }}" alt="Photo from {{ $post['author']['name'] ?? 'the house' }}"
+            <native:image src="{{ $attachment['thumbnail_url'] ?? $attachment['url'] }}" alt="Photo from {{ $post['author']['name'] ?? 'the house' }}"
                           class="w-full h-64 rounded-md object-cover" />
         @elseif (str_starts_with($attachment['mime_type'], 'video/'))
             <native:row ref="video-{{ $attachment['id'] }}" a11y-label="Play video"
