@@ -1,5 +1,6 @@
 @use('App\Icons\Ios')
 @use('App\Icons\Android')
+@use('Native\Mobile\Edge\SharedValue')
 
 <native:column class="w-full rounded-lg bg-theme-surface border border-theme-outline-variant p-4 gap-3">
     <native:row class="w-full items-center gap-3">
@@ -24,8 +25,11 @@
 
     @foreach ($post['attachments'] as $attachment)
         @if (str_starts_with($attachment['mime_type'], 'image/') && $attachment['url'])
-            <native:image src="{{ $attachment['url'] }}" alt="Photo from {{ $post['author']['name'] ?? 'the house' }}"
-                          class="w-full h-64 rounded-md object-cover" />
+            <native:pressable ref="photo-{{ $attachment['id'] }}" a11y-label="View photo full screen" press-opacity="0.8"
+                              class="w-full" @tap="viewPhoto({{ $loop->index }})">
+                <native:image src="{{ $attachment['url'] }}" alt="Photo from {{ $post['author']['name'] ?? 'the house' }}"
+                              class="w-full h-64 rounded-md object-cover" />
+            </native:pressable>
         @elseif (str_starts_with($attachment['mime_type'], 'video/'))
             <native:row ref="video-{{ $attachment['id'] }}" a11y-label="Play video"
                         class="w-full h-48 rounded-md bg-theme-secondary items-center justify-center gap-2"
@@ -35,6 +39,21 @@
             </native:row>
         @endif
     @endforeach
+
+    @if ($viewingPhoto !== null && isset($post['attachments'][$viewingPhoto]['url']))
+        {{-- A fresh SharedValue each render, so reopening a photo starts unzoomed. --}}
+        @php $zoom = SharedValue::make(1.0); @endphp
+
+        <native:modal ref="photo-viewer" :visible="true" a11y-label="Photo" @dismiss="closePhoto">
+            <native:gesture-area :pinch="$zoom" pinch-min="1" pinch-max="4" class="w-full h-full">
+                <native:column fill center class="bg-black">
+                    <native:image src="{{ $post['attachments'][$viewingPhoto]['url'] }}"
+                                  alt="Photo from {{ $post['author']['name'] ?? 'the house' }}"
+                                  class="w-full h-full" :fit="1" :scale="$zoom" />
+                </native:column>
+            </native:gesture-area>
+        </native:modal>
+    @endif
 
     @if ($confirmingDelete)
         <native:row class="w-full gap-2">

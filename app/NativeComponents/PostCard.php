@@ -23,6 +23,19 @@ class PostCard extends NativeComponent
 
     public ?string $error = null;
 
+    /** Index into the post's attachments of the photo open full screen. */
+    public ?int $viewingPhoto = null;
+
+    public function viewPhoto(int $index): void
+    {
+        $this->viewingPhoto = $index;
+    }
+
+    public function closePhoto(): void
+    {
+        $this->viewingPhoto = null;
+    }
+
     /**
      * There is no native video element in v4's UI kit yet, so videos open
      * in the in-app browser, which plays them with the system player.

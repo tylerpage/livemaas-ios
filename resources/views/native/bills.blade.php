@@ -2,7 +2,7 @@
 @use('App\Icons\Android')
 
 <native:column fill class="bg-theme-background">
-    <native:refreshable @refresh="refresh" class="w-full">
+    <native:refreshable @refresh="refresh" class="w-full flex-1">
         <native:column class="w-full gap-4 p-4">
             {{-- Month switcher --}}
             <native:row class="w-full items-center">

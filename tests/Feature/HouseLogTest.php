@@ -47,6 +47,24 @@ it('shows house logs from the API', function (): void {
     Http::assertSent(fn (Request $request): bool => $request->hasHeader('Authorization', 'Bearer 1|secret-token'));
 });
 
+it('opens a photo full screen when tapped and closes it on dismiss', function (): void {
+    Http::fake([
+        'api.test/api/v1/posts*' => Http::response([
+            'data' => [apiPost(['attachments' => [
+                ['id' => '01JPHOTO', 'mime_type' => 'image/jpeg', 'url' => 'https://bucket.test/01JPHOTO.jpg'],
+            ]])],
+            'meta' => ['next_cursor' => null],
+        ]),
+    ]);
+
+    Native::test(Timeline::class)
+        ->assertMissingElement('modal')
+        ->tap('photo-01JPHOTO')
+        ->assertElement('modal')
+        ->dismissSheet('photo-viewer')
+        ->assertMissingElement('modal');
+});
+
 it('shows an empty state when there are no logs', function (): void {
     Http::fake(['api.test/*' => Http::response(['data' => [], 'meta' => ['next_cursor' => null]])]);
 

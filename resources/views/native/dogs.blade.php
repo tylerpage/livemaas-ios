@@ -8,7 +8,7 @@
             <native:button ref="add-first-dog" variant="primary" @tap="addDog">Add a dog</native:button>
         </native:column>
     @else
-        <native:refreshable @refresh="refresh" class="w-full">
+        <native:refreshable @refresh="refresh" class="w-full flex-1">
             <native:column class="w-full gap-4 p-4">
                 @if (count($dogs) > 1)
                     <native:button ref="feed-all" variant="primary" size="lg" class="w-full"
