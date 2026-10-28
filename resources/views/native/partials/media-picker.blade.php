@@ -2,6 +2,7 @@
 @use('App\Icons\Ios')
 @use('App\Icons\Android')
 
+@unless ($hideButtons ?? false)
 <native:row class="w-full gap-2">
     <native:button ref="library" variant="secondary" class="flex-1" size="sm"
                    :ios-icon="Ios::PhotoOnRectangle" :android-icon="Android::PhotoLibrary" @tap="pickFromLibrary">
@@ -24,6 +25,7 @@
         </native:button>
     @endif
 </native:row>
+@endunless
 
 @foreach ($media as $item)
     <native:row class="w-full items-center gap-3 rounded-md bg-theme-surface p-2">

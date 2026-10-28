@@ -65,7 +65,9 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    // The household's timezone, matching the API. Drives meal guessing, "today"
+    // and the default bills month; times sent to the API carry their offset.
+    'timezone' => env('APP_TIMEZONE', 'America/Chicago'),
 
     /*
     |--------------------------------------------------------------------------

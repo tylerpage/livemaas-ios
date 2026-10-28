@@ -200,6 +200,101 @@ class LivemaasApi
     }
 
     /**
+     * Every dog with today's totals and its last feeding.
+     *
+     * @return list<array<string, mixed>>
+     */
+    public function dogs(): array
+    {
+        return $this->send(fn (PendingRequest $http): Response => $http->get('dogs'))['data'];
+    }
+
+    /**
+     * One dog with the last week of daily totals and recent feedings.
+     *
+     * @return array<string, mixed>
+     */
+    public function dog(int $dogId): array
+    {
+        return $this->send(fn (PendingRequest $http): Response => $http->get("dogs/{$dogId}"))['data'];
+    }
+
+    /**
+     * @param  array<string, mixed>  $dog
+     * @return array<string, mixed>
+     */
+    public function createDog(array $dog): array
+    {
+        return $this->send(fn (PendingRequest $http): Response => $http->post('dogs', $dog))['data'];
+    }
+
+    /**
+     * @return array{meals: list<array{value: string, label: string}>, foods: list<array<string, mixed>>}
+     */
+    public function dogOptions(): array
+    {
+        return $this->send(fn (PendingRequest $http): Response => $http->get('dogs/options'))['data'];
+    }
+
+    /**
+     * @param  array<string, mixed>  $feeding
+     * @return array<string, mixed>
+     */
+    public function logFeeding(int $dogId, array $feeding): array
+    {
+        return $this->send(fn (PendingRequest $http): Response => $http->post("dogs/{$dogId}/feedings", $feeding))['data'];
+    }
+
+    /**
+     * Feed several dogs in one meal. All bowls are saved or none are.
+     *
+     * @param  array<string, mixed>  $batch  meal, dog_food_id, fed_at, notes, share_to_timeline, bowls[]
+     * @return list<array<string, mixed>>
+     */
+    public function feedDogs(array $batch): array
+    {
+        return $this->send(fn (PendingRequest $http): Response => $http->post('feedings/batch', $batch))['data'];
+    }
+
+    /**
+     * @param  array<string, mixed>  $changes
+     * @return array<string, mixed>
+     */
+    public function updateFeeding(int $feedingId, array $changes): array
+    {
+        return $this->send(fn (PendingRequest $http): Response => $http->patch("feedings/{$feedingId}", $changes))['data'];
+    }
+
+    public function deleteFeeding(int $feedingId): void
+    {
+        $this->send(fn (PendingRequest $http): Response => $http->delete("feedings/{$feedingId}"));
+    }
+
+    /**
+     * Open bags of food with how much is left and when each runs out.
+     *
+     * @return list<array<string, mixed>>
+     */
+    public function dogFoods(): array
+    {
+        return $this->send(fn (PendingRequest $http): Response => $http->get('dog-foods'))['data'];
+    }
+
+    /**
+     * @param  array<string, mixed>  $food
+     * @return array<string, mixed>
+     */
+    public function createDogFood(array $food): array
+    {
+        return $this->send(fn (PendingRequest $http): Response => $http->post('dog-foods', $food))['data'];
+    }
+
+    public function finishDogFood(int $foodId): void
+    {
+        $this->send(fn (PendingRequest $http): Response => $http->patch("dog-foods/{$foodId}", ['finished' => true]));
+    }
+
+    /**
      * Upload a file from the phone straight to the bucket: presign, PUT the
      * bytes to the signed URL, then confirm. The file is streamed from disk so
      * a long video never has to fit in memory.
