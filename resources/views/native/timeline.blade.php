@@ -9,7 +9,7 @@
     @if ($loaded && $posts === [] && ! $error)
         <native:empty-state title="No house logs yet" message="Tap + to post the first update, photo or video." />
     @else
-        <native:refreshable @refresh="refresh" class="w-full">
+        <native:refreshable @refresh="refresh" class="w-full flex-1">
             <native:column class="w-full gap-3 p-4">
                 @foreach ($posts as $post)
                     <native:post-card :post="$post" key="post-{{ $post['id'] }}" @deleted="postDeleted" />

@@ -36,6 +36,19 @@ class PostCard extends NativeComponent
         }
     }
 
+    /**
+     * The timeline shows a screen-sized thumbnail; tapping opens the
+     * full-size original in the in-app browser, where it can be zoomed.
+     */
+    public function openPhoto(int $index): void
+    {
+        $url = $this->post['attachments'][$index]['url'] ?? null;
+
+        if ($url !== null) {
+            Browser::inApp($url);
+        }
+    }
+
     public function askToDelete(): void
     {
         $this->confirmingDelete = true;

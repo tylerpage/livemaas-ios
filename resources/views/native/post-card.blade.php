@@ -24,8 +24,10 @@
 
     @foreach ($post['attachments'] as $attachment)
         @if (str_starts_with($attachment['mime_type'], 'image/') && $attachment['url'])
-            <native:image src="{{ $attachment['thumbnail_url'] ?? $attachment['url'] }}" alt="Photo from {{ $post['author']['name'] ?? 'the house' }}"
-                          class="w-full h-64 rounded-md object-cover" />
+            <native:pressable ref="photo-{{ $attachment['id'] }}" a11y-label="Open photo" class="w-full" @tap="openPhoto({{ $loop->index }})">
+                <native:image src="{{ $attachment['thumbnail_url'] ?? $attachment['url'] }}" alt="Photo from {{ $post['author']['name'] ?? 'the house' }}"
+                              class="w-full h-64 rounded-md object-cover" />
+            </native:pressable>
         @elseif (str_starts_with($attachment['mime_type'], 'video/'))
             <native:row ref="video-{{ $attachment['id'] }}" a11y-label="Play video"
                         class="w-full h-48 rounded-md bg-theme-secondary items-center justify-center gap-2"

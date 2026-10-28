@@ -15,7 +15,7 @@
             <native:empty-state title="No files yet" message="Tap + to add insurance policies, warranties, manuals and other paperwork." />
         @endif
     @else
-        <native:refreshable @refresh="refresh" class="w-full">
+        <native:refreshable @refresh="refresh" class="w-full flex-1">
             <native:column class="w-full gap-3 px-4 pb-4">
                 @foreach ($documents as $document)
                     <native:row ref="document-{{ $document['id'] }}" a11y-label="{{ $document['title'] }}"

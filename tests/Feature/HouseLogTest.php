@@ -135,3 +135,22 @@ it('ignores a cancelled picker', function (): void {
         ->emitNative(MediaSelected::class, ['success' => false, 'cancelled' => true])
         ->assertSet('media', []);
 });
+
+it('opens the full-size photo when a timeline photo is tapped', function (): void {
+    Http::fake([
+        'api.test/api/v1/posts*' => Http::response([
+            'data' => [apiPost(['attachments' => [[
+                'id' => 'photo-1',
+                'mime_type' => 'image/jpeg',
+                'url' => 'https://bucket.test/photo.jpg',
+                'thumbnail_url' => 'https://bucket.test/photo-thumb.jpg',
+            ]]])],
+            'meta' => ['next_cursor' => null],
+        ]),
+    ]);
+    $bridge = Native::fakeBridge()->respondTo('Browser.OpenInApp', ['success' => true]);
+
+    Native::test(Timeline::class)->tap('photo-photo-1');
+
+    $bridge->assertCalled('Browser.OpenInApp', fn (array $params): bool => $params['url'] === 'https://bucket.test/photo.jpg');
+});
