@@ -176,6 +176,8 @@ it('shows who owes whom for the month', function (): void {
     Native::test(Bills::class)
         ->assertSee('Settle up')
         ->assertSee('$100.00')
+        ->assertDontSee('Lindsey · 50%')
+        ->tap('split-details')
         ->assertSee('Lindsey · 50%')
         ->assertSee('paid $300.00 of $200.00')
         ->tap('change-split')

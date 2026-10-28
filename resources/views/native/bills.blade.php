@@ -67,13 +67,20 @@
                         <native:text ref="all-square" class="text-theme-on-surface">You're all square this month.</native:text>
                     @endforelse
 
-                    <native:divider class="w-full border-theme-outline-variant" />
-                    @foreach ($summary['settle_up']['members'] as $member)
-                        <native:row class="w-full">
-                            <native:text class="flex-1 text-sm text-theme-on-surface-variant">{{ $member['name'] }} · {{ $this->percent($member['share_percent']) }}%</native:text>
-                            <native:text class="text-sm text-theme-on-surface">paid {{ $this->money($member['paid_cents']) }} of {{ $this->money($member['share_cents']) }}</native:text>
-                        </native:row>
-                    @endforeach
+                    <native:button ref="split-details" variant="ghost" size="sm" class="self-start"
+                                   :ios-icon="$showSplitDetails ? Ios::ChevronUp : Ios::ChevronDown"
+                                   :android-icon="$showSplitDetails ? Android::ExpandLess : Android::ExpandMore"
+                                   @tap="toggleSplitDetails">Details</native:button>
+
+                    @if ($showSplitDetails)
+                        <native:divider class="w-full border-theme-outline-variant" />
+                        @foreach ($summary['settle_up']['members'] as $member)
+                            <native:row class="w-full">
+                                <native:text class="flex-1 text-sm text-theme-on-surface-variant">{{ $member['name'] }} · {{ $this->percent($member['share_percent']) }}%</native:text>
+                                <native:text class="text-sm text-theme-on-surface">paid {{ $this->money($member['paid_cents']) }} of {{ $this->money($member['share_cents']) }}</native:text>
+                            </native:row>
+                        @endforeach
+                    @endif
                 </native:column>
             @endif
 

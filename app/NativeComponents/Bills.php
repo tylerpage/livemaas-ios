@@ -29,6 +29,9 @@ class Bills extends NativeComponent
     /** @var array<string, mixed>|null */
     public ?array $summary = null;
 
+    /** The settle-up card's per-person paid-vs-share lines, folded away until asked for. */
+    public bool $showSplitDetails = false;
+
     public bool $loaded = false;
 
     public ?string $error = null;
@@ -105,6 +108,11 @@ class Bills extends NativeComponent
     public function percent(float $percent): string
     {
         return rtrim(rtrim(number_format($percent, 2, '.', ''), '0'), '.');
+    }
+
+    public function toggleSplitDetails(): void
+    {
+        $this->showSplitDetails = ! $this->showSplitDetails;
     }
 
     public function openBillSplit(): void
