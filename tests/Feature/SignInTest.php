@@ -98,3 +98,11 @@ it('shows the five house tabs', function (): void {
         ->assertSee('Bills')
         ->assertSee('Dogs');
 });
+
+it('opens password reset on the web app', function (): void {
+    $bridge = Native::fakeBridge()->respondTo('Browser.OpenInApp', ['success' => true]);
+
+    Native::test(Login::class)->tap('forgot-password');
+
+    $bridge->assertCalled('Browser.OpenInApp', fn (array $params): bool => $params['url'] === 'https://api.test/forgot-password');
+});

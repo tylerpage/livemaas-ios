@@ -9,6 +9,7 @@ use App\Services\Api\ApiSession;
 use App\Services\Api\LivemaasApi;
 use Illuminate\View\View;
 use Native\Mobile\Edge\NativeComponent;
+use Native\Mobile\Facades\Browser;
 
 class Login extends NativeComponent
 {
@@ -51,6 +52,15 @@ class Login extends NativeComponent
         }
 
         $this->replace('/');
+    }
+
+    /**
+     * Resetting a password happens on the web app; open it in the in-app
+     * browser so the emailed link and the new password both stay there.
+     */
+    public function forgotPassword(): void
+    {
+        Browser::inApp(config('livemaas.web_url').'/forgot-password');
     }
 
     public function render(): View

@@ -8,6 +8,9 @@ return [
     // records lives there; the phone keeps only the signed-in token.
     'api_url' => rtrim((string) env('LIVEMAAS_API_URL', 'http://127.0.0.1:8000'), '/').'/api/v1',
 
+    // The same server's web app; the phone opens pages like password reset there.
+    'web_url' => rtrim((string) env('LIVEMAAS_API_URL', 'http://127.0.0.1:8000'), '/'),
+
     'api_timeout_seconds' => 20,
 
     // Videos go straight from the phone to the bucket; allow for a slow uplink.

@@ -28,5 +28,9 @@
         <native:button ref="sign-in" variant="primary" :loading="$signingIn" class="w-full mt-2" @tap="signIn">
             Sign in
         </native:button>
+
+        <native:button ref="forgot-password" variant="ghost" size="sm" class="w-full" @tap="forgotPassword">
+            Forgot password?
+        </native:button>
     </native:column>
 </native:column>
