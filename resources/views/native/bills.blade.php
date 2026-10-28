@@ -2,7 +2,7 @@
 @use('App\Icons\Android')
 
 <native:column fill class="bg-theme-background">
-    <native:refreshable @refresh="refresh" class="w-full">
+    <native:refreshable @refresh="refresh" class="w-full flex-1">
         <native:column class="w-full gap-4 p-4">
             {{-- Month switcher --}}
             <native:row class="w-full items-center">
@@ -46,6 +46,37 @@
                 </native:column>
             @endif
 
+            {{-- Who owes whom under the bill split. Private bills are left out, so "paid" can differ from WHO PAID above. --}}
+            @if (($summary['settle_up'] ?? null) && $summary['count'] > 0)
+                <native:column ref="settle-up" class="w-full rounded-lg bg-theme-surface border border-theme-outline-variant p-4 gap-3">
+                    <native:row class="w-full items-center">
+                        <native:text class="flex-1 font-bold text-theme-primary">Settle up</native:text>
+                        <native:button ref="change-split" variant="ghost" size="sm" @tap="openBillSplit">Change split</native:button>
+                    </native:row>
+
+                    @forelse ($summary['settle_up']['transfers'] as $transfer)
+                        <native:row ref="owes-{{ $transfer['from']['id'] }}-{{ $transfer['to']['id'] }}"
+                                    a11y-label="{{ $transfer['from']['name'] }} owes {{ $transfer['to']['name'] }} {{ $this->money($transfer['amount_cents']) }}"
+                                    class="w-full items-center gap-2 rounded-md bg-theme-surface-variant p-3">
+                            <native:text class="font-bold text-theme-on-surface">{{ $transfer['from']['name'] }}</native:text>
+                            <native:icon :ios="Ios::ArrowRight" :android="Android::ArrowForward" :size="14" class="text-theme-on-surface-variant" />
+                            <native:text class="flex-1 font-bold text-theme-on-surface">{{ $transfer['to']['name'] }}</native:text>
+                            <native:text class="text-lg font-bold text-theme-primary">{{ $this->money($transfer['amount_cents']) }}</native:text>
+                        </native:row>
+                    @empty
+                        <native:text ref="all-square" class="text-theme-on-surface">You're all square this month.</native:text>
+                    @endforelse
+
+                    <native:divider class="w-full border-theme-outline-variant" />
+                    @foreach ($summary['settle_up']['members'] as $member)
+                        <native:row class="w-full">
+                            <native:text class="flex-1 text-sm text-theme-on-surface-variant">{{ $member['name'] }} · {{ $this->percent($member['share_percent']) }}%</native:text>
+                            <native:text class="text-sm text-theme-on-surface">paid {{ $this->money($member['paid_cents']) }} of {{ $this->money($member['share_cents']) }}</native:text>
+                        </native:row>
+                    @endforeach
+                </native:column>
+            @endif
+
             @if ($error)
                 <native:text ref="bills-error" class="text-sm text-theme-destructive">{{ $error }}</native:text>
             @endif
@@ -65,6 +96,9 @@
                             {{ $this->paidOnLabel($bill['paid_on']) }} · {{ $bill['paid_by']['name'] ?? '' }}@if ($bill['payment_method']) · {{ $bill['payment_method']['display_name'] }}@endif
                         </native:text>
                     </native:column>
+                    @if ($bill['is_private'] ?? false)
+                        <native:icon :ios="Ios::LockFill" :android="Android::Lock" :size="16" a11y-label="Private" class="text-theme-on-surface-variant" />
+                    @endif
                     @if (($bill['attachment_count'] ?? 0) > 0)
                         <native:icon :ios="Ios::Paperclip" :android="Android::AttachFile" :size="16" a11y-label="Has photos" class="text-theme-on-surface-variant" />
                     @endif

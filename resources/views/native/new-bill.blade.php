@@ -33,6 +33,11 @@
 
         <native:outlined-text-input ref="notes" label="Notes" multiline min-lines="2" native:model.blur="notes" />
 
+        <native:column class="w-full gap-1">
+            <native:toggle ref="private" label="Private" native:model="isPrivate" />
+            <native:text class="text-sm text-theme-on-surface-variant">Only you can see it, and it isn't part of the bill split.</native:text>
+        </native:column>
+
         <native:text class="text-sm font-bold text-theme-on-surface-variant">Photos of the bill</native:text>
         @include('native.partials.media-picker', ['allowVideo' => false])
 

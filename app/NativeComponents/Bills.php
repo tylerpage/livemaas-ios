@@ -102,6 +102,16 @@ class Bills extends NativeComponent
         return Carbon::parse($date)->format('M j');
     }
 
+    public function percent(float $percent): string
+    {
+        return rtrim(rtrim(number_format($percent, 2, '.', ''), '0'), '.');
+    }
+
+    public function openBillSplit(): void
+    {
+        $this->navigate('/bill-split');
+    }
+
     public function addBill(): void
     {
         $this->navigate('/bills/new');

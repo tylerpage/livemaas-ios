@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\NativeComponents\BillDetail;
 use App\NativeComponents\Bills;
+use App\NativeComponents\BillSplit;
 use App\NativeComponents\DocumentDetail;
 use App\NativeComponents\DogDetail;
 use App\NativeComponents\Dogs;
@@ -47,6 +48,7 @@ Route::nativeGroup(HouseStack::class, function (): void {
     Route::native('/dogs/{id}/feed', FeedDog::class);
     Route::native('/feedings/{id}', FeedingDetail::class);
     Route::native('/dog-foods/new', NewDogFood::class);
+    Route::native('/bill-split', BillSplit::class);
     Route::native('/payment-methods', PaymentMethods::class);
     Route::native('/payment-methods/new', NewPaymentMethod::class);
 });

@@ -16,6 +16,7 @@
                     'Paid with' => $bill['payment_method']['display_name'] ?? 'Not recorded',
                     'Category' => $bill['category_label'],
                     'Entered by' => $bill['created_by']['name'] ?? '—',
+                    ...(($bill['is_private'] ?? false) ? ['Visibility' => 'Private — only you, not split'] : []),
                 ] as $label => $value)
                     <native:row class="w-full">
                         <native:text class="flex-1 text-theme-on-surface-variant">{{ $label }}</native:text>

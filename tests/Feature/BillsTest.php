@@ -157,3 +157,44 @@ it('adds a card with only the last four digits', function (): void {
         && $request['type'] === 'credit_card'
         && $request['owner_id'] === 2);
 });
+
+it('shows who owes whom for the month', function (): void {
+    Http::fake([
+        'api.test/api/v1/bills/summary*' => Http::response(['data' => [
+            'total_cents' => 40_000, 'count' => 2, 'by_member' => [], 'by_payment_method' => [], 'by_category' => [],
+            'settle_up' => [
+                'members' => [
+                    ['id' => 2, 'name' => 'Lindsey', 'share_percent' => 50.0, 'paid_cents' => 10_000, 'share_cents' => 20_000, 'balance_cents' => -10_000],
+                    ['id' => 1, 'name' => 'Tyler', 'share_percent' => 50.0, 'paid_cents' => 30_000, 'share_cents' => 20_000, 'balance_cents' => 10_000],
+                ],
+                'transfers' => [['from' => ['id' => 2, 'name' => 'Lindsey'], 'to' => ['id' => 1, 'name' => 'Tyler'], 'amount_cents' => 10_000]],
+            ],
+        ]]),
+        'api.test/api/v1/bills*' => Http::response(['data' => []]),
+    ]);
+
+    Native::test(Bills::class)
+        ->assertSee('Settle up')
+        ->assertSee('$100.00')
+        ->assertSee('Lindsey · 50%')
+        ->assertSee('paid $300.00 of $200.00')
+        ->tap('change-split')
+        ->assertNavigatedTo('/bill-split');
+});
+
+it('saves a private bill', function (): void {
+    Http::fake([
+        'api.test/api/v1/bills/options' => Http::response(billOptions()),
+        'api.test/api/v1/bills' => Http::response(['data' => ['id' => 9]], 201),
+    ]);
+
+    Native::test(NewBill::class)
+        ->set('payee', 'Birthday gift')
+        ->set('amount', '50')
+        ->set('isPrivate', true)
+        ->tap('save');
+
+    Http::assertSent(fn (Request $request): bool => $request->method() === 'POST'
+        && str_ends_with($request->url(), '/bills')
+        && $request['is_private'] === true);
+});

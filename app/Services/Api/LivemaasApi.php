@@ -137,6 +137,27 @@ class LivemaasApi
     }
 
     /**
+     * Each member's share of the household's bills.
+     *
+     * @return array{enabled: bool, members: list<array{id: int, name: string, share_percent: float|null}>}
+     */
+    public function billSplit(): array
+    {
+        return $this->send(fn (PendingRequest $http): Response => $http->get('bill-split'))['data'];
+    }
+
+    /**
+     * Save every member's share together (they must add up to 100), or pass
+     * no shares to stop splitting bills.
+     *
+     * @param  list<array{user_id: int, percent: float}>  $shares
+     */
+    public function saveBillSplit(array $shares): void
+    {
+        $this->send(fn (PendingRequest $http): Response => $http->put('bill-split', ['shares' => $shares]));
+    }
+
+    /**
      * @return list<array<string, mixed>>
      */
     public function paymentMethods(): array

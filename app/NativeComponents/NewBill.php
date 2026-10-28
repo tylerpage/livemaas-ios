@@ -40,6 +40,9 @@ class NewBill extends NativeComponent
 
     public string $notes = '';
 
+    /** Only the person who paid or entered it sees it, and it isn't split. */
+    public bool $isPrivate = false;
+
     /** @var list<array{key: string, path: string, mime_type: string, name: string, status: string, attachment_id: string|null}> */
     public array $media = [];
 
@@ -144,6 +147,7 @@ class NewBill extends NativeComponent
                     ? null
                     : $this->idFor('payment_methods', 'display_name', $this->paymentMethod),
                 'notes' => trim($this->notes) === '' ? null : trim($this->notes),
+                'is_private' => $this->isPrivate,
                 'attachment_ids' => $this->attachmentIds(),
             ]);
         } catch (ApiException $exception) {

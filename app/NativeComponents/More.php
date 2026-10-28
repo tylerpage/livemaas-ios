@@ -35,6 +35,11 @@ class More extends NativeComponent
         $this->navigate('/payment-methods');
     }
 
+    public function openBillSplit(): void
+    {
+        $this->navigate('/bill-split');
+    }
+
     public function signOut(LivemaasApi $api): void
     {
         $api->signOut();

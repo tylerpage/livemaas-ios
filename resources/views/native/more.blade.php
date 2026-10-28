@@ -17,6 +17,13 @@
         <native:icon :ios="Ios::ChevronRight" :android="Android::ChevronRight" :size="14" class="text-theme-on-surface-variant" />
     </native:row>
 
+    <native:row ref="bill-split" a11y-label="Bill split"
+                class="w-full items-center gap-3 rounded-lg bg-theme-surface p-4" @tap="openBillSplit">
+        <native:icon :ios="Ios::ChartPieFill" :android="Android::PieChart" :size="20" class="text-theme-primary" />
+        <native:text class="flex-1 text-theme-on-surface">Bill split</native:text>
+        <native:icon :ios="Ios::ChevronRight" :android="Android::ChevronRight" :size="14" class="text-theme-on-surface-variant" />
+    </native:row>
+
     <native:button ref="sign-out" variant="destructive" class="w-full" @tap="signOut">
         Sign out
     </native:button>
