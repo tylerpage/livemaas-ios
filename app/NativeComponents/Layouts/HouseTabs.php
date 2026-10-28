@@ -6,6 +6,7 @@ namespace App\NativeComponents\Layouts;
 
 use App\Icons\Android;
 use App\Icons\Ios;
+use App\NativeComponents\Timeline;
 use Native\Mobile\Edge\Layouts\Builders\NavBar;
 use Native\Mobile\Edge\Layouts\Builders\Tab;
 use Native\Mobile\Edge\Layouts\Builders\TabBar;
@@ -14,8 +15,8 @@ use Native\Mobile\Edge\NativeComponent;
 
 /**
  * The five-tab shell every signed-in screen sits in. Uses the system bars
- * (Liquid Glass on iOS 26) rather than custom-drawn ones, tinted with the
- * house's slate.
+ * (Liquid Glass on iOS 26) tinted with the house blue. The timeline, as the
+ * home screen, carries the house logo in place of a title.
  */
 class HouseTabs extends NativeLayout
 {
@@ -26,8 +27,15 @@ class HouseTabs extends NativeLayout
 
     public function navBar(NativeComponent $screen): ?NavBar
     {
+        if ($screen instanceof Timeline) {
+            return NavBar::make()
+                ->logo('images/livemaas-logo.png', height: 36)
+                ->displayMode('inline');
+        }
+
         return NavBar::make()
             ->title($screen->navTitle())
+            ->textColor(theme('primary'))
             ->displayMode('large');
     }
 

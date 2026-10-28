@@ -10,4 +10,7 @@ return [
 
     'api_timeout_seconds' => 20,
 
+    // Videos go straight from the phone to the bucket; allow for a slow uplink.
+    'upload_timeout_seconds' => 600,
+
 ];

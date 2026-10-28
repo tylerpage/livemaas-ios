@@ -1,0 +1,50 @@
+{
+    "name": "livemaas/mobile-document-picker",
+    "version": "1.0.0",
+    "description": "Pick PDFs, photos and videos from the iOS Files app.",
+    "namespace": "DocumentPicker",
+    "category": "utilities",
+    "license": "MIT",
+    "pricing": {
+        "type": "free"
+    },
+    "author": {
+        "name": "Tyler Page",
+        "email": "",
+        "url": ""
+    },
+    "platforms": [
+        "ios"
+    ],
+    "bridge_functions": [
+        {
+            "name": "DocumentPicker.Pick",
+            "ios": "DocumentPickerFunctions.Pick",
+            "description": "Open the Files picker; results arrive as a DocumentsPicked event"
+        }
+    ],
+    "android": {
+        "min_version": 26,
+        "permissions": [],
+        "dependencies": {
+            "implementation": []
+        }
+    },
+    "ios": {
+        "min_version": "15.0",
+        "permissions": [],
+        "repositories": [],
+        "dependencies": {
+            "swift_packages": [],
+            "pods": []
+        }
+    },
+    "assets": {
+        "ios": []
+    },
+    "secrets": [],
+    "events": [
+        "Livemaas\\MobileDocumentPicker\\Events\\DocumentsPicked"
+    ],
+    "service_provider": "Livemaas\\MobileDocumentPicker\\DocumentPickerServiceProvider"
+}

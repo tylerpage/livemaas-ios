@@ -110,9 +110,9 @@ return [
     */
 
     'permissions' => [
-        // 'NSCameraUsageDescription' => 'Used to take a profile photo.',
-        // 'NSMicrophoneUsageDescription' => 'Used to record audio with your videos.',
-        // 'NSPhotoLibraryUsageDescription' => 'Used to select photos for your post.',
+        'NSCameraUsageDescription' => 'Take photos and videos for house logs, bills and dog logs.',
+        'NSMicrophoneUsageDescription' => 'Record sound with the videos you add to house logs.',
+        'NSPhotoLibraryUsageDescription' => 'Attach photos and videos from your library to house logs and bills.',
     ],
 
     /*

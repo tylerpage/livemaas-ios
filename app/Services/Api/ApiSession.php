@@ -21,6 +21,8 @@ class ApiSession
 
     private const string UserNameKey = 'user_name';
 
+    private const string UserIdKey = 'user_id';
+
     public function token(): ?string
     {
         return $this->get(self::TokenKey);
@@ -36,15 +38,23 @@ class ApiSession
         return $this->get(self::UserNameKey);
     }
 
-    public function start(string $token, string $userName): void
+    public function userId(): ?int
+    {
+        $id = $this->get(self::UserIdKey);
+
+        return $id === null ? null : (int) $id;
+    }
+
+    public function start(string $token, int $userId, string $userName): void
     {
         $this->put(self::TokenKey, $token);
+        $this->put(self::UserIdKey, (string) $userId);
         $this->put(self::UserNameKey, $userName);
     }
 
     public function end(): void
     {
-        DeviceSetting::query()->whereIn('key', [self::TokenKey, self::UserNameKey])->delete();
+        DeviceSetting::query()->whereIn('key', [self::TokenKey, self::UserIdKey, self::UserNameKey])->delete();
     }
 
     private function get(string $key): ?string

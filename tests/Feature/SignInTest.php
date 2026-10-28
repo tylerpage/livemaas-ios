@@ -69,7 +69,7 @@ it('sends signed-out users to the login screen', function (): void {
 });
 
 it('stores the token encrypted at rest', function (): void {
-    app(ApiSession::class)->start('1|secret-token', 'Tyler');
+    app(ApiSession::class)->start('1|secret-token', 1, 'Tyler');
 
     $raw = DB::table('device_settings')->where('key', 'api_token')->value('value');
 
@@ -77,7 +77,7 @@ it('stores the token encrypted at rest', function (): void {
 });
 
 it('signs out even when the server is unreachable', function (): void {
-    app(ApiSession::class)->start('1|secret-token', 'Tyler');
+    app(ApiSession::class)->start('1|secret-token', 1, 'Tyler');
     Http::fake(fn () => throw new ConnectionException('offline'));
 
     Native::test(More::class)
@@ -89,10 +89,12 @@ it('signs out even when the server is unreachable', function (): void {
 });
 
 it('shows the five house tabs', function (): void {
-    app(ApiSession::class)->start('1|secret-token', 'Tyler');
+    app(ApiSession::class)->start('1|secret-token', 1, 'Tyler');
+    Http::fake(['api.test/*' => Http::response(['data' => [], 'meta' => ['next_cursor' => null]])]);
 
     Native::visit('/')
         ->assertHasTabBar()
-        ->assertNavTitle('Timeline')
-        ->assertSee('Nothing here yet');
+        ->assertElement('image', fn (array $node): bool => str_ends_with((string) ($node['props']['src'] ?? ''), 'images/livemaas-logo.png'))
+        ->assertSee('Bills')
+        ->assertSee('Dogs');
 });

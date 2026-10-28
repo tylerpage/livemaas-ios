@@ -3,8 +3,11 @@
 /**
  * Native UI — Theme Tokens
  *
- * Colors are sampled from the house: slate lap siding, harbor-blue shake
- * gable, charcoal shingles, white trim, black front door, the lawn and sky.
+ * Colors come from the house. Blue leads: the shake-gable blue is the brand
+ * color, lifted slightly for primary so it reads as blue on a phone screen
+ * rather than charcoal. Slate siding, white trim, the black front door, the
+ * lawn and the sky fill in the rest.
+ *
  * Keep each `on-*` token at 4.5:1 contrast against its background token.
  */
 
@@ -13,51 +16,50 @@ return [
     'theme' => [
 
         'light' => [
-            // Slate lap siding.
-            'primary' => '#515660',
+            // Gable blue, lifted from #2F3C49 — buttons, FAB, active tab, links.
+            'primary' => '#3B5573',
             'on-primary' => '#FFFFFF',
 
-            // Harbor-blue shake gable.
+            // The gable blue as painted — deep fills: video tiles, avatars, banners.
             'secondary' => '#2F3C49',
             'on-secondary' => '#FFFFFF',
 
-            // White trim and garage doors.
+            // White trim on a blue-tinted page.
             'surface' => '#FFFFFF',
             'on-surface' => '#0B0F14',
-            'background' => '#F4F6F8',
+            'background' => '#EEF2F6',
             'on-background' => '#0B0F14',
 
-            'surface-variant' => '#E8ECF0',
-            // Shingle charcoal, darkened from #70757E to clear 4.5:1 on the variant surface.
-            'on-surface-variant' => '#5C616A',
+            'surface-variant' => '#E1E8EF',
+            'on-surface-variant' => '#55606C',
 
-            'outline' => '#D3D9DF',
-            'outline-variant' => '#E8ECF0',
+            'outline' => '#C9D3DD',
+            'outline-variant' => '#E1E8EF',
 
             'destructive' => '#B91C1C',
             'on-destructive' => '#FFFFFF',
 
-            // Sky — links, info, "new" highlights.
+            // Sky — highlights and "new" badges.
             'accent' => '#8CBFFB',
             'on-accent' => '#0B0F14',
 
             // Lawn — paid, fed, done.
             'success' => '#55870A',
-            'on-success' => '#0B0F14',
+            'on-success' => '#FFFFFF',
 
             'input-fill' => '#FFFFFF',
             'on-input' => '#0B0F14',
         ],
 
         'dark' => [
-            'primary' => '#A3ABB8',
+            'primary' => '#9DB4CC',
             'on-primary' => '#0B0F14',
 
-            'secondary' => '#B2C1CC',
-            'on-secondary' => '#0B0F14',
+            'secondary' => '#2F3C49',
+            'on-secondary' => '#F4F6F8',
 
-            // Front-door black and the harbor gable as dark surfaces.
-            'surface' => '#1A222B',
+            // Front-door black page, gable-blue cards.
+            'surface' => '#16202A',
             'on-surface' => '#F4F6F8',
             'background' => '#0B0F14',
             'on-background' => '#F4F6F8',
@@ -65,8 +67,8 @@ return [
             'surface-variant' => '#2F3C49',
             'on-surface-variant' => '#B9C1CA',
 
-            'outline' => '#3A4552',
-            'outline-variant' => '#252E38',
+            'outline' => '#34414E',
+            'outline-variant' => '#202B36',
 
             'destructive' => '#F87171',
             'on-destructive' => '#0B0F14',
@@ -77,7 +79,7 @@ return [
             'success' => '#7DB33A',
             'on-success' => '#0B0F14',
 
-            'input-fill' => '#1A222B',
+            'input-fill' => '#16202A',
             'on-input' => '#F4F6F8',
         ],
 

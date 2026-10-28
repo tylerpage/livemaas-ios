@@ -30,6 +30,11 @@ class More extends NativeComponent
         return 'More';
     }
 
+    public function openCards(): void
+    {
+        $this->navigate('/payment-methods');
+    }
+
     public function signOut(LivemaasApi $api): void
     {
         $api->signOut();

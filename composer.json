@@ -10,20 +10,26 @@
         "mobile"
     ],
     "license": "MIT",
-    "repositories": [
-        {
+    "repositories": {
+        "document-picker": {
+            "type": "path",
+            "url": "packages/mobile-document-picker"
+        },
+        "0": {
             "name": "nativephp-plugins",
             "type": "composer",
             "url": "https://plugins.nativephp.com"
         }
-    ],
+    },
     "require": {
         "php": "^8.3",
         "laravel/boost": "^2.0",
         "laravel/framework": "^13.0",
         "laravel/tinker": "^3.0",
+        "livemaas/mobile-document-picker": "@dev",
         "nativephp/mobile": "^4.5",
         "nativephp/mobile-browser": "^1.0",
+        "nativephp/mobile-camera": "^1.1",
         "nativephp/mobile-ui": "^0.6"
     },
     "require-dev": {

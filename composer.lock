@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6c9e36392070fb68b3becb072c8a2bab",
+    "content-hash": "4bd54903b876472337443161f1743285",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -2544,6 +2544,42 @@
             "time": "2026-10-16T15:19:33+00:00"
         },
         {
+            "name": "livemaas/mobile-document-picker",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "packages/mobile-document-picker",
+                "reference": "11be1fbd782031c63750220eb1bd2665d5830fd2"
+            },
+            "require": {
+                "nativephp/mobile": "^4.0",
+                "php": "^8.3"
+            },
+            "type": "nativephp-plugin",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Livemaas\\MobileDocumentPicker\\DocumentPickerServiceProvider"
+                    ]
+                },
+                "nativephp": {
+                    "manifest": "nativephp.json"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Livemaas\\MobileDocumentPicker\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Pick PDFs, photos and videos from the iOS Files app in a NativePHP Mobile app.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "monolog/monolog",
             "version": "3.12.1",
             "source": {
@@ -2799,6 +2835,61 @@
                 "source": "https://github.com/NativePHP/mobile-browser/tree/1.2.1"
             },
             "time": "2026-10-22T19:51:21+00:00"
+        },
+        {
+            "name": "nativephp/mobile-camera",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/NativePHP/mobile-camera.git",
+                "reference": "8a7d215413fb0979cb0c86f9c8499f883a671077"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/NativePHP/mobile-camera/zipball/8a7d215413fb0979cb0c86f9c8499f883a671077",
+                "reference": "8a7d215413fb0979cb0c86f9c8499f883a671077",
+                "shasum": ""
+            },
+            "require": {
+                "nativephp/mobile": "^3.0 || ^4.0",
+                "php": "^8.2"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^10.0",
+                "pestphp/pest": "^2.7|^3.0|^4.0"
+            },
+            "type": "nativephp-plugin",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Native\\Mobile\\Providers\\CameraServiceProvider"
+                    ]
+                },
+                "nativephp": {
+                    "manifest": "nativephp.json"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Native\\Mobile\\Providers\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "NativePHP",
+                    "email": "info@nativephp.com"
+                }
+            ],
+            "description": "Camera plugin for NativePHP Mobile (Photo capture, Video recording, Gallery picker)",
+            "support": {
+                "issues": "https://github.com/NativePHP/mobile-camera/issues",
+                "source": "https://github.com/NativePHP/mobile-camera/tree/1.1.0"
+            },
+            "time": "2026-10-22T15:11:58+00:00"
         },
         {
             "name": "nativephp/mobile-ui",
@@ -10996,7 +11087,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "livemaas/mobile-document-picker": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
