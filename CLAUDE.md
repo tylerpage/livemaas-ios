@@ -432,3 +432,13 @@ Button::make()
 </code-snippet>
 
 </laravel-boost-guidelines>
+
+# Feature parity: API, web app, iOS app
+
+This iOS app is one of three parts that must stay in step: the **API** (`../api`, `/api/v1` — source of truth for data and logic), the **web app** (`../api/resources/js`, Inertia + React), and this **iOS app**. The full rule lives in `../api/.ai/rules/feature-parity.md`; in short:
+
+- **A feature is not done until it works in all three.** When you add or change a user-facing feature here, make the matching change in the web app (and the API if needed) in the same piece of work — or, if told to do only this side, list exactly what the web app still needs before finishing.
+- **Logic lives in the API**, not in screens. Add API fields rather than rename/remove them unless both clients are updated together.
+- **Same words, same behaviour** across web and iOS: labels, empty states, errors, confirmations, defaults.
+- `App\Support\Money` / `App\Support\Cups` are mirrored in `../api/resources/js/lib/format.ts`, and theme tokens in `config/native-ui.php` are mirrored in `../api/resources/css/app.css` — change one, change the other.
+- In the final summary, say which of API / web / iOS changed and confirm the others needed nothing, or list what's left.
