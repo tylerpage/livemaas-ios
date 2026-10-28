@@ -57,36 +57,37 @@
                     </native:column>
                 @endforeach
 
-                {{-- Food bags --}}
+                {{-- Dog food being fed --}}
                 <native:row class="w-full items-center pt-2">
-                    <native:text class="flex-1 text-lg font-bold text-theme-primary">Food</native:text>
-                    <native:button ref="add-food" variant="ghost" size="sm" @tap="addFood">Open a new bag</native:button>
+                    <native:text class="flex-1 text-lg font-bold text-theme-primary">Dog food</native:text>
+                    <native:button ref="add-food" variant="ghost" size="sm" @tap="addFood">Add dog food</native:button>
                 </native:row>
 
                 @forelse ($foods as $food)
                     <native:column class="w-full rounded-lg bg-theme-surface p-4 gap-2">
                         <native:row class="w-full items-center gap-3">
                             @if ($food['photo_url'] ?? null)
-                                <native:image ref="bag-photo-{{ $food['id'] }}" src="{{ $food['photo_url'] }}" alt="Bag of {{ $food['display_name'] }}"
+                                <native:image ref="food-photo-{{ $food['id'] }}" src="{{ $food['photo_url'] }}" alt="{{ $food['display_name'] }}"
                                               class="w-12 h-12 rounded-md object-cover" />
                             @endif
                             <native:text class="flex-1 font-bold text-theme-on-surface">{{ $food['display_name'] }}</native:text>
+                            <native:button ref="edit-food-{{ $food['id'] }}" variant="ghost" size="sm" @tap="editFood({{ $food['id'] }})">Edit</native:button>
                             <native:button ref="finish-{{ $food['id'] }}" variant="ghost" size="sm" @tap="askToFinish({{ $food['id'] }})">Finished</native:button>
                         </native:row>
-                        <native:text ref="bag-{{ $food['id'] }}" class="text-sm text-theme-on-surface-variant">{{ $this->bagLabel($food) }}</native:text>
+                        <native:text ref="food-{{ $food['id'] }}" class="text-sm text-theme-on-surface-variant">{{ $this->foodLabel($food) }}</native:text>
                         @if ($food['cups_per_bag'])
-                            <native:progress-bar :value="$this->bagProgress($food)" class="w-full" />
+                            <native:progress-bar :value="$this->foodProgress($food)" class="w-full" />
                         @endif
 
                         @if ($confirmingFinish === $food['id'])
                             <native:row class="w-full gap-2">
                                 <native:button ref="cancel-finish" variant="secondary" class="flex-1" @tap="cancelFinish">Not yet</native:button>
-                                <native:button ref="confirm-finish" variant="primary" class="flex-1" @tap="finishFood">Bag is empty</native:button>
+                                <native:button ref="confirm-finish" variant="primary" class="flex-1" @tap="finishFood">All gone</native:button>
                             </native:row>
                         @endif
                     </native:column>
                 @empty
-                    <native:text class="text-sm text-theme-on-surface-variant">Add the bag you are feeding from to see when it will run out.</native:text>
+                    <native:text class="text-sm text-theme-on-surface-variant">Add the dog food you're feeding to see when it will run out.</native:text>
                 @endforelse
 
                 @if ($error)

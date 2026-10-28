@@ -24,17 +24,38 @@ class BillDetail extends NativeComponent
 
     public ?string $error = null;
 
+    public int $billId = 0;
+
     public function mount(LivemaasApi $api, int $id): void
     {
         if ($this->redirectIfSignedOut()) {
             return;
         }
 
+        $this->billId = $id;
+        $this->refresh($api);
+    }
+
+    /**
+     * Back from editing: show the saved changes.
+     */
+    public function onResume(): void
+    {
+        $this->refresh(app(LivemaasApi::class));
+    }
+
+    public function refresh(LivemaasApi $api): void
+    {
         try {
-            $this->bill = $api->bill($id);
+            $this->bill = $api->bill($this->billId);
         } catch (ApiException $exception) {
             $this->error = $exception->getMessage();
         }
+    }
+
+    public function edit(): void
+    {
+        $this->navigate("/bills/{$this->billId}/edit");
     }
 
     public function money(int $cents): string

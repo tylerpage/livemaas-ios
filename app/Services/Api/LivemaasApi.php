@@ -131,6 +131,17 @@ class LivemaasApi
         return $this->send(fn (PendingRequest $http): Response => $http->post('bills', $bill))['data'];
     }
 
+    /**
+     * Replace a bill's details. New `attachment_ids` are added to its photos.
+     *
+     * @param  array<string, mixed>  $bill
+     * @return array<string, mixed>
+     */
+    public function updateBill(int $billId, array $bill): array
+    {
+        return $this->send(fn (PendingRequest $http): Response => $http->put("bills/{$billId}", $bill))['data'];
+    }
+
     public function deleteBill(int $billId): void
     {
         $this->send(fn (PendingRequest $http): Response => $http->delete("bills/{$billId}"));
@@ -292,7 +303,7 @@ class LivemaasApi
     }
 
     /**
-     * Open bags of food with how much is left and when each runs out.
+     * Dog food being fed, with how much is left and when each runs out.
      *
      * @return list<array<string, mixed>>
      */
@@ -308,6 +319,25 @@ class LivemaasApi
     public function createDogFood(array $food): array
     {
         return $this->send(fn (PendingRequest $http): Response => $http->post('dog-foods', $food))['data'];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function dogFood(int $foodId): array
+    {
+        return $this->send(fn (PendingRequest $http): Response => $http->get("dog-foods/{$foodId}"))['data'];
+    }
+
+    /**
+     * A new photo in `attachment_ids` replaces the one shown.
+     *
+     * @param  array<string, mixed>  $food
+     * @return array<string, mixed>
+     */
+    public function updateDogFood(int $foodId, array $food): array
+    {
+        return $this->send(fn (PendingRequest $http): Response => $http->patch("dog-foods/{$foodId}", $food))['data'];
     }
 
     public function finishDogFood(int $foodId): void

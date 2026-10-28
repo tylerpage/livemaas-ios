@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\NativeComponents\DogDetail;
 use App\NativeComponents\Dogs;
+use App\NativeComponents\EditDogFood;
 use App\NativeComponents\FeedDog;
 use App\NativeComponents\FeedDogs;
 use App\NativeComponents\FeedingDetail;
@@ -264,4 +265,42 @@ it('sets each dog\'s amount with the scoop buttons on Feed both', function (): v
 
     Http::assertSent(fn (Request $request): bool => str_ends_with($request->url(), 'feedings/batch')
         && $request['bowls'] === [['dog_id' => 1, 'served_cups' => 1.5], ['dog_id' => 2, 'served_cups' => 1.0]]);
+});
+
+it('edits a dog food and replaces its photo', function (): void {
+    Http::fake([
+        'api.test/api/v1/dog-foods/6' => Http::sequence()
+            ->push(['data' => ['id' => 6, 'brand' => 'Kirkland', 'name' => 'Lamb & Rice', 'cups_per_bag' => 160.0, 'photo_url' => 'https://bucket.test/old.jpg']])
+            ->push(['data' => ['id' => 6]]),
+    ]);
+
+    Native::test(EditDogFood::class, ['id' => 6])
+        ->assertSet('brand', 'Kirkland')
+        ->assertSet('cupsPerBag', '160')
+        ->assertSee('Add a new photo to replace this one.')
+        ->set('name', 'Salmon & Sweet Potato')
+        ->tap('save')
+        ->assertWentBack();
+
+    Http::assertSent(fn (Request $request): bool => $request->method() === 'PATCH'
+        && str_ends_with($request->url(), '/dog-foods/6')
+        && $request['name'] === 'Salmon & Sweet Potato'
+        && $request['cups_per_bag'] === 160.0);
+});
+
+it('calls it dog food, and opens the edit screen from a food', function (): void {
+    Http::fake([
+        'api.test/api/v1/dogs' => Http::response(['data' => [apiDog()]]),
+        'api.test/api/v1/dog-foods' => Http::response(['data' => [[
+            'id' => 6, 'brand' => 'Kirkland', 'name' => 'Lamb & Rice', 'display_name' => 'Kirkland Lamb & Rice',
+            'cups_per_bag' => null, 'opened_on' => '2026-10-01', 'photo_url' => null, 'cups_remaining' => null, 'runs_out_on' => null,
+        ]]]),
+    ]);
+
+    Native::test(Dogs::class)
+        ->assertSee('Dog food')
+        ->assertSee('Add dog food')
+        ->assertDontSee('bag')
+        ->tap('edit-food-6')
+        ->assertNavigatedTo('/dog-foods/6/edit');
 });

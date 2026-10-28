@@ -38,7 +38,10 @@
             <native:text class="text-sm text-theme-on-surface-variant">Only you can see it, and it isn't part of the bill split.</native:text>
         </native:column>
 
-        <native:text class="text-sm font-bold text-theme-on-surface-variant">Photos of the bill</native:text>
+        <native:text class="text-sm font-bold text-theme-on-surface-variant">{{ ($existingPhotos ?? 0) > 0 ? 'Add more photos of the bill' : 'Photos of the bill' }}</native:text>
+        @if (($existingPhotos ?? 0) > 0)
+            <native:text ref="existing-photos" class="text-sm text-theme-on-surface-variant">{{ $existingPhotos }} {{ Str::plural('photo', $existingPhotos) }} already saved with this bill.</native:text>
+        @endif
         @include('native.partials.media-picker', ['allowVideo' => false])
 
         @if ($error)

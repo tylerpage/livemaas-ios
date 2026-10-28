@@ -24,7 +24,7 @@ class NewBill extends NativeComponent
 {
     use RequiresSignIn, UploadsMedia;
 
-    private const string NoCard = 'Not recorded';
+    protected const string NoCard = 'Not recorded';
 
     public string $payee = '';
 
@@ -137,7 +137,7 @@ class NewBill extends NativeComponent
         $this->saving = true;
 
         try {
-            $api->createBill([
+            $this->persist($api, [
                 'payee' => trim($this->payee),
                 'amount_cents' => $cents,
                 'category' => $this->idFor('categories', 'label', $this->category, key: 'value'),
@@ -165,12 +165,20 @@ class NewBill extends NativeComponent
         return 'Add a bill';
     }
 
+    /**
+     * @param  array<string, mixed>  $bill
+     */
+    protected function persist(LivemaasApi $api, array $bill): void
+    {
+        $api->createBill($bill);
+    }
+
     public function render(): View
     {
         return view('native.new-bill');
     }
 
-    private function loadOptions(LivemaasApi $api): void
+    protected function loadOptions(LivemaasApi $api): void
     {
         try {
             $this->options = $api->billOptions();

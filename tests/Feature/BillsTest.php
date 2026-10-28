@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\NativeComponents\BillDetail;
 use App\NativeComponents\Bills;
+use App\NativeComponents\EditBill;
 use App\NativeComponents\NewBill;
 use App\NativeComponents\NewPaymentMethod;
 use App\Services\Api\ApiSession;
@@ -199,4 +200,46 @@ it('saves a private bill', function (): void {
     Http::assertSent(fn (Request $request): bool => $request->method() === 'POST'
         && str_ends_with($request->url(), '/bills')
         && $request['is_private'] === true);
+});
+
+it('edits a bill, starting from what was saved', function (): void {
+    Http::fake([
+        'api.test/api/v1/bills/options' => Http::response(billOptions()),
+        'api.test/api/v1/bills/3' => Http::sequence()
+            ->push(['data' => [
+                'id' => 3, 'payee' => 'Xcel Energy', 'amount_cents' => 14_237, 'paid_on' => '2026-10-20',
+                'category' => 'utilities', 'category_label' => 'Utilities', 'notes' => null, 'is_private' => false,
+                'paid_by' => ['id' => 2, 'name' => 'Sam'],
+                'payment_method' => ['id' => 4, 'display_name' => 'Old Visa ••1111'],
+                'attachments' => [['id' => 'a1']],
+            ]])
+            ->push(['data' => ['id' => 3]]),
+    ]);
+
+    Native::test(EditBill::class, ['id' => 3])
+        ->assertSet('payee', 'Xcel Energy')
+        ->assertSet('amount', '142.37')
+        ->assertSet('paidBy', 'Sam')
+        ->assertSet('paymentMethod', 'Old Visa ••1111')
+        ->assertSee('1 photo already saved with this bill.')
+        ->set('amount', '150')
+        ->set('isPrivate', true)
+        ->tap('save')
+        ->assertWentBack();
+
+    Http::assertSent(fn (Request $request): bool => $request->method() === 'PUT'
+        && str_ends_with($request->url(), '/bills/3')
+        && $request['amount_cents'] === 15_000
+        && $request['paid_by_id'] === 2
+        && $request['payment_method_id'] === 4
+        && $request['is_private'] === true);
+});
+
+it('opens the edit screen from a bill', function (): void {
+    Http::fake(['api.test/api/v1/bills/3' => Http::response(['data' => [
+        'id' => 3, 'payee' => 'Xcel Energy', 'amount_cents' => 14_237, 'paid_on' => '2026-10-20', 'category_label' => 'Utilities',
+        'notes' => null, 'paid_by' => ['name' => 'Sam'], 'created_by' => ['name' => 'Tyler'], 'payment_method' => null, 'attachments' => [],
+    ]])]);
+
+    Native::test(BillDetail::class, ['id' => 3])->tap('edit')->assertNavigatedTo('/bills/3/edit');
 });

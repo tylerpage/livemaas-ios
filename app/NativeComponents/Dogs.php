@@ -14,7 +14,7 @@ use Native\Mobile\Edge\NativeComponent;
 
 /**
  * Each dog's day at a glance — eaten against target, last meal — plus the
- * open bags of food and when they will run out.
+ * dog food being fed and when each will run out.
  */
 class Dogs extends NativeComponent
 {
@@ -96,7 +96,7 @@ class Dogs extends NativeComponent
     /**
      * @param  array<string, mixed>  $food
      */
-    public function bagProgress(array $food): float
+    public function foodProgress(array $food): float
     {
         return $food['cups_per_bag'] ? max(0.0, min(1.0, $food['cups_remaining'] / $food['cups_per_bag'])) : 0.0;
     }
@@ -104,7 +104,7 @@ class Dogs extends NativeComponent
     /**
      * @param  array<string, mixed>  $food
      */
-    public function bagLabel(array $food): string
+    public function foodLabel(array $food): string
     {
         $parts = [];
 
@@ -142,6 +142,11 @@ class Dogs extends NativeComponent
     public function addFood(): void
     {
         $this->navigate('/dog-foods/new');
+    }
+
+    public function editFood(int $foodId): void
+    {
+        $this->navigate("/dog-foods/{$foodId}/edit");
     }
 
     public function askToFinish(int $foodId): void

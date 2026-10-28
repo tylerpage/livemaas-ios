@@ -13,8 +13,9 @@ use Illuminate\View\View;
 use Native\Mobile\Edge\NativeComponent;
 
 /**
- * Open a new bag. Its size in cups lets the app estimate when it runs out;
- * an optional photo of the bag makes the right food easy to reorder.
+ * Add a dog food. Its total size in cups lets the app estimate when it runs
+ * out; an optional photo makes the right food easy to reorder. EditDogFood
+ * reuses this screen for an existing one.
  */
 class NewDogFood extends NativeComponent
 {
@@ -61,7 +62,7 @@ class NewDogFood extends NativeComponent
         }
 
         if (trim($this->cupsPerBag) !== '' && ($cups === null || $cups <= 0)) {
-            $this->fieldErrors['cupsPerBag'] = 'Roughly how many cups in the bag?';
+            $this->fieldErrors['cupsPerBag'] = 'Roughly how many cups in total?';
         }
 
         if ($this->hasFailedUploads()) {
@@ -75,7 +76,7 @@ class NewDogFood extends NativeComponent
         $this->saving = true;
 
         try {
-            $api->createDogFood([
+            $this->persist($api, [
                 'brand' => trim($this->brand),
                 'name' => trim($this->name),
                 'cups_per_bag' => $cups,
@@ -93,7 +94,15 @@ class NewDogFood extends NativeComponent
 
     public function navTitle(): string
     {
-        return 'New bag of food';
+        return 'Add dog food';
+    }
+
+    /**
+     * @param  array<string, mixed>  $food
+     */
+    protected function persist(LivemaasApi $api, array $food): void
+    {
+        $api->createDogFood($food);
     }
 
     public function render(): View
