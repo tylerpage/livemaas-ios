@@ -226,6 +226,18 @@ class LivemaasApi
         return $this->send(fn (PendingRequest $http): Response => $http->post('documents', $document))['data'];
     }
 
+    /**
+     * Replace a file's name, category and notes. New `attachment_ids` are
+     * added to the ones it has.
+     *
+     * @param  array<string, mixed>  $document
+     * @return array<string, mixed>
+     */
+    public function updateDocument(int $documentId, array $document): array
+    {
+        return $this->send(fn (PendingRequest $http): Response => $http->put("documents/{$documentId}", $document))['data'];
+    }
+
     public function deleteDocument(int $documentId): void
     {
         $this->send(fn (PendingRequest $http): Response => $http->delete("documents/{$documentId}"));

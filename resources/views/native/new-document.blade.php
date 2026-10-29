@@ -14,7 +14,10 @@
 
         <native:outlined-text-input ref="notes" label="Notes" placeholder="Policy number, renewal date…" multiline min-lines="2" native:model.blur="notes" />
 
-        <native:text class="text-sm font-bold text-theme-on-surface-variant">Files</native:text>
+        <native:text class="text-sm font-bold text-theme-on-surface-variant">{{ ($existingFiles ?? 0) > 0 ? 'Add more files' : 'Files' }}</native:text>
+        @if (($existingFiles ?? 0) > 0)
+            <native:text ref="existing-files" class="text-sm text-theme-on-surface-variant">{{ $existingFiles }} {{ Str::plural('file', $existingFiles) }} already saved with this one.</native:text>
+        @endif
         @include('native.partials.media-picker', ['allowVideo' => false, 'allowFiles' => true])
 
         @if ($error)

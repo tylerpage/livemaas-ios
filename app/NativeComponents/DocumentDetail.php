@@ -23,17 +23,38 @@ class DocumentDetail extends NativeComponent
 
     public ?string $error = null;
 
+    public int $documentId = 0;
+
     public function mount(LivemaasApi $api, int $id): void
     {
         if ($this->redirectIfSignedOut()) {
             return;
         }
 
+        $this->documentId = $id;
+        $this->refresh($api);
+    }
+
+    /**
+     * Back from editing: show the saved changes.
+     */
+    public function onResume(): void
+    {
+        $this->refresh(app(LivemaasApi::class));
+    }
+
+    public function refresh(LivemaasApi $api): void
+    {
         try {
-            $this->document = $api->document($id);
+            $this->document = $api->document($this->documentId);
         } catch (ApiException $exception) {
             $this->error = $exception->getMessage();
         }
+    }
+
+    public function edit(): void
+    {
+        $this->navigate("/documents/{$this->documentId}/edit");
     }
 
     /**

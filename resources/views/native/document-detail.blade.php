@@ -36,6 +36,8 @@
                 </native:row>
             @endforeach
 
+            <native:button ref="edit" variant="secondary" class="w-full" :ios-icon="Ios::Pencil" :android-icon="Android::Edit" @tap="edit">Edit file</native:button>
+
             @if ($confirmingDelete)
                 <native:row class="w-full gap-2">
                     <native:button ref="cancel-delete" variant="secondary" class="flex-1" @tap="cancelDelete">Keep</native:button>

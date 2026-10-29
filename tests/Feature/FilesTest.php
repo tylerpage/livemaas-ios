@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\NativeComponents\DocumentDetail;
+use App\NativeComponents\EditDocument;
 use App\NativeComponents\Files;
 use App\NativeComponents\NewDocument;
 use App\Services\Api\ApiSession;
@@ -110,4 +111,34 @@ it('shows a document and opens its PDF', function (): void {
         ->tap('attachment-0');
 
     $bridge->assertCalled('Browser.OpenInApp', fn (array $params): bool => $params['url'] === 'https://bucket.test/policy.pdf');
+});
+
+it('edits a file\'s name, category and notes without adding files', function (): void {
+    Http::fake([
+        'api.test/api/v1/documents/options' => Http::response(documentCategories()),
+        'api.test/api/v1/documents/4' => Http::sequence()
+            ->push(['data' => apiDocument()])
+            ->push(['data' => apiDocument(['title' => 'Home insurance 2027'])]),
+    ]);
+
+    Native::test(EditDocument::class, ['id' => 4])
+        ->assertSet('title', 'Home insurance 2026')
+        ->assertSet('category', 'Insurance')
+        ->assertSee('1 file already saved with this one.')
+        ->set('title', 'Home insurance 2027')
+        ->set('category', 'Warranties')
+        ->tap('save')
+        ->assertWentBack();
+
+    Http::assertSent(fn (Request $request): bool => $request->method() === 'PUT'
+        && str_ends_with($request->url(), '/documents/4')
+        && $request['title'] === 'Home insurance 2027'
+        && $request['category'] === 'warranties'
+        && $request['attachment_ids'] === []);
+});
+
+it('opens the edit screen from a file', function (): void {
+    Http::fake(['api.test/api/v1/documents/4' => Http::response(['data' => apiDocument()])]);
+
+    Native::test(DocumentDetail::class, ['id' => 4])->tap('edit')->assertNavigatedTo('/documents/4/edit');
 });

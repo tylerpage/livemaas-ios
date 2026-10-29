@@ -9,6 +9,7 @@ use App\NativeComponents\DocumentDetail;
 use App\NativeComponents\DogDetail;
 use App\NativeComponents\Dogs;
 use App\NativeComponents\EditBill;
+use App\NativeComponents\EditDocument;
 use App\NativeComponents\EditDogFood;
 use App\NativeComponents\FeedDog;
 use App\NativeComponents\FeedDogs;
@@ -45,6 +46,7 @@ Route::nativeGroup(HouseStack::class, function (): void {
     Route::native('/bills/{id}/edit', EditBill::class);
     Route::native('/documents/new', NewDocument::class);
     Route::native('/documents/{id}', DocumentDetail::class);
+    Route::native('/documents/{id}/edit', EditDocument::class);
     Route::native('/dogs/new', NewDog::class);
     Route::native('/dogs/feed-all', FeedDogs::class);
     Route::native('/dogs/{id}', DogDetail::class);

@@ -73,7 +73,7 @@ class NewDocument extends NativeComponent
             $this->fieldErrors['title'] = 'Give it a name, like "Home insurance 2026".';
         }
 
-        if ($this->media === []) {
+        if ($this->media === [] && $this->needsFiles()) {
             $this->error = 'Add at least one file or photo.';
         } elseif ($this->hasFailedUploads()) {
             $this->error = 'Remove or retry the failed upload first.';
@@ -86,7 +86,7 @@ class NewDocument extends NativeComponent
         $this->saving = true;
 
         try {
-            $api->createDocument([
+            $this->persist($api, [
                 'title' => trim($this->title),
                 'category' => collect($this->categories)->firstWhere('label', $this->category)['value'] ?? 'other',
                 'notes' => trim($this->notes) === '' ? null : trim($this->notes),
@@ -105,6 +105,22 @@ class NewDocument extends NativeComponent
     public function navTitle(): string
     {
         return 'Add a file';
+    }
+
+    /**
+     * A new file needs something attached; an edit keeps what it has.
+     */
+    protected function needsFiles(): bool
+    {
+        return true;
+    }
+
+    /**
+     * @param  array<string, mixed>  $document
+     */
+    protected function persist(LivemaasApi $api, array $document): void
+    {
+        $api->createDocument($document);
     }
 
     public function render(): View
