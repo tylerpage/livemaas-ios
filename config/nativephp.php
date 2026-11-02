@@ -184,6 +184,7 @@ return [
         '*_SECRET',
         'DB_PASSWORD',
         'DB_USERNAME',
+        'APP_STORE_*',
     ],
 
     /*
