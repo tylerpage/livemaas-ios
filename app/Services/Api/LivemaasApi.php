@@ -191,6 +191,57 @@ class LivemaasApi
     }
 
     /**
+     * The kinds of utility and the cards that can pay one.
+     *
+     * @return array{kinds: list<array{value: string, label: string}>, payment_methods: list<array<string, mixed>>}
+     */
+    public function utilityOptions(): array
+    {
+        return $this->send(fn (PendingRequest $http): Response => $http->get('utilities/options'))['data'];
+    }
+
+    /**
+     * Names, kinds and cards only; the account number and sign-in come with `utility()`.
+     *
+     * @return list<array<string, mixed>>
+     */
+    public function utilities(): array
+    {
+        return $this->send(fn (PendingRequest $http): Response => $http->get('utilities'))['data'];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function utility(int $utilityId): array
+    {
+        return $this->send(fn (PendingRequest $http): Response => $http->get("utilities/{$utilityId}"))['data'];
+    }
+
+    /**
+     * @param  array<string, mixed>  $utility
+     * @return array<string, mixed>
+     */
+    public function createUtility(array $utility): array
+    {
+        return $this->send(fn (PendingRequest $http): Response => $http->post('utilities', $utility))['data'];
+    }
+
+    /**
+     * @param  array<string, mixed>  $utility
+     * @return array<string, mixed>
+     */
+    public function updateUtility(int $utilityId, array $utility): array
+    {
+        return $this->send(fn (PendingRequest $http): Response => $http->put("utilities/{$utilityId}", $utility))['data'];
+    }
+
+    public function deleteUtility(int $utilityId): void
+    {
+        $this->send(fn (PendingRequest $http): Response => $http->delete("utilities/{$utilityId}"));
+    }
+
+    /**
      * @return list<array{value: string, label: string}>
      */
     public function documentCategories(): array

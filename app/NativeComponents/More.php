@@ -35,6 +35,11 @@ class More extends NativeComponent
         $this->navigate('/payment-methods');
     }
 
+    public function openUtilities(): void
+    {
+        $this->navigate('/utilities');
+    }
+
     public function openBillSplit(): void
     {
         $this->navigate('/bill-split');

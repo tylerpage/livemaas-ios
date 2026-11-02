@@ -11,6 +11,7 @@ use App\NativeComponents\Dogs;
 use App\NativeComponents\EditBill;
 use App\NativeComponents\EditDocument;
 use App\NativeComponents\EditDogFood;
+use App\NativeComponents\EditUtility;
 use App\NativeComponents\FeedDog;
 use App\NativeComponents\FeedDogs;
 use App\NativeComponents\FeedingDetail;
@@ -25,8 +26,11 @@ use App\NativeComponents\NewDog;
 use App\NativeComponents\NewDogFood;
 use App\NativeComponents\NewPaymentMethod;
 use App\NativeComponents\NewPost;
+use App\NativeComponents\NewUtility;
 use App\NativeComponents\PaymentMethods;
 use App\NativeComponents\Timeline;
+use App\NativeComponents\Utilities;
+use App\NativeComponents\UtilityDetail;
 use Illuminate\Support\Facades\Route;
 
 Route::native('/login', Login::class);
@@ -57,4 +61,8 @@ Route::nativeGroup(HouseStack::class, function (): void {
     Route::native('/bill-split', BillSplit::class);
     Route::native('/payment-methods', PaymentMethods::class);
     Route::native('/payment-methods/new', NewPaymentMethod::class);
+    Route::native('/utilities', Utilities::class);
+    Route::native('/utilities/new', NewUtility::class);
+    Route::native('/utilities/{id}', UtilityDetail::class);
+    Route::native('/utilities/{id}/edit', EditUtility::class);
 });
